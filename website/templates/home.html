@@ -1,0 +1,52 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
+%}
+<h1 align="center">Decks</h1>
+<ul class="list-group list-group-flush todo-items-container" id="decks">
+  {% for deck in user.decks %}
+  <li class="todo-item-container d-flex flex-row">    
+    <div class="label-container d-flex flex-row justify-content-around">
+      <label class="checkbox-label"><a>{{deck.name}}</a> {{0}}</label>
+      
+        <div class="delete-icon-container" onClick="editDeck({{ deck.id }})"><i class="fas fa-pen delete-icon"></i></div> 
+        <div class="delete-icon-container" onClick="deleteDeck({{ deck.id }})"><i class="far fa-trash-alt delete-icon"></i></div>
+      
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+<div class="container mt-4">
+  <div class="row">
+    <button type="button" onClick="createDeck()" class="btn btn-outline-secondary">Create Deck</button>
+  </div>
+</div>
+<script>
+ 
+function createDeck(){
+  deckName = prompt("Create new deck with name:");
+  if(deckName !== null){
+    if(deckName !== ""){
+      if(deckName.length<2){
+        alert("Deck Name Too Short")
+        return
+      }
+    }else{
+      alert("Please Enter Deck Name")
+      return
+    }
+  }else{
+    return
+  }
+
+  fetch("/", {
+    method: "POST",
+    body: JSON.stringify({ deckName: deckName }),
+  }).then((_res) => {
+    window.location.href = "/";
+  });
+}
+
+
+
+</script>
+
+{% endblock %}

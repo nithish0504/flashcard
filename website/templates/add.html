@@ -1,0 +1,43 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
+    %}
+    <div class="well editPanel">
+      <h2>Add a Card</h2>
+      
+      <div class="container">
+        <form action="/add_card" method="post" class="">
+          <div class="row">
+            <div class=" col-12 mt-2">
+              <label for="type">Deck</label><br>
+              <select class="form-select w-100 p-2" name="deck_name">
+                <option>Select Deck</option>
+                {% for deck in user.decks %}
+                <option value='{{deck.id}}'>{{deck.name}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group  mt-2 col-12">
+              <label for="front">Front of Card</label>
+              <input type="text" required name="front" id="front" class="form-control">
+            </div>
+            <div class="form-group  mt-2 col-12">
+              <label for="back">Back of Card</label>
+              <textarea name="back" required class="form-control" id="back" placeholder="back of card" rows="6"></textarea>
+            </div>
+            <div class="form-group mt-2 col-12">
+              <button type="submit" class=" btn btn-lg btn-primary">Save</button>
+             </div>
+          </div>
+      
+        </form>
+      </div>
+          
+         
+          
+      </form>
+  </div>
+
+  <div class="page-header">
+      <!-- <h2>{{ cards|length }} Card{{ '' if (cards|length == 1) else 's' }}</h2> -->
+  </div>
+    {% endblock %}
+    
