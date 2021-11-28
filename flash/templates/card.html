@@ -1,0 +1,68 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
+    %}
+
+
+    {% if card == "deck finished" %}
+          <div class="container">
+            <h2> Deck is Finished</h2>
+          </div>
+          
+          {% else %}
+          <div class="container mt-4">
+            <div class="d-flex flex-row justify-content-between">
+                <div class="">
+                    <button class="btn btn-outline-secondary mr-2"><a href="/card/edit/{{card.id}}">Edit</a></button>
+                    <button class="btn btn-outline-secondary mr-2" onclick="limits()">Limits</button>
+                </div>
+                <div>
+                    <button></button>
+                </div>
+            </div>
+        </div>
+    
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-12 d-flex flex-row"><p class="align-self-center">{{card.front}}</p></div>
+                <div id='ansdiv' class="col-12 justify-content-center d-none"><p class="align-self-center">{{card.back}}</p></div>
+            </div>
+        </div>
+    
+        <div id="btndiv" class="container mt-4 d-none">
+            <div class="d-flex flex-row justify-content-between">
+                <div class="">
+                    <form action="/update-score/{{card.id}}" method="post">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="score" id="hard" value="1">
+                            <label class="form-check-label" for="hard">
+                              Hard
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" name="score" id="medium" value="2">
+                            <label class="form-check-label" for="medium">
+                              Medium
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" name="score" id="easy" value="3">
+                            <label class="form-check-label" for="easy">
+                              Easy
+                            </label>
+                          </div>
+                          <div class="form-group mt-2 col-12">
+                            <button type="submit" class=" btn btn-lg btn-primary">Submit Answer</button>
+                          </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    
+        <div class="d-flex flex-row justify-content-center w-100 sticky-bottom"  id="sansdiv">
+            <button  id="sansdivbtn" class="btn btn-primary" onClick="showAnswer()"> Show Answer</button>
+        </div>
+          {% endif %}
+
+   
+
+    {% endblock %}
+    

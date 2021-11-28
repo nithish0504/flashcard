@@ -1,11 +1,4 @@
-function deleteNote(noteId) {
-  fetch("/delete-note", {
-    method: "POST",
-    body: JSON.stringify({ noteId: noteId }),
-  }).then((_res) => {
-    window.location.href = "/";
-  });
-}
+
 function hello(){
   console.log("hello here")
   deckName = prompt("Create new deck with name:");
@@ -61,15 +54,19 @@ function showAnswer(e){
   _btndiv.classList.remove("d-none")
   let _sans = document.getElementById("sansdiv")
   _sans.classList.add("d-none")
+  document.getElementById("sansdivbtn").classList.add("d-none")
 }
 
-function score(level,obj){
+function score(){
+  console.log(e.target.id)
+  obj=JSON.parse(obj)
+  console.log(e.target.value)
   fetch("/update-score", {
     method: "POST",
-    body: JSON.stringify({ cardId: obj.id, deckId:obj.decck_id, score:level }),
+    body: JSON.stringify({ cardId: obj.id, deckId:obj.deck_id, score:level }),
   }).then((_res) => {
     let url=`/cards/${obj.deckId}`
-    window.location.href = url;
+    //window.location.href = url;
   });
   
 }

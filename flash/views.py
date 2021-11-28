@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, jsonify
 from flask_login import login_required, current_user
 from sqlalchemy.orm import query
-from .models import Note,Deck,Card
+from .models import Deck,Card
 from . import db
 import json
 
@@ -19,7 +19,7 @@ def home():
         if len(deckName) < 1:
              flash('deckName is too short!', category='error')
         else:
-            new_deck = Deck(name=deckName, user_id=current_user.id)
+            new_deck = Deck(name=deckName,type=0,score=0, user_id=current_user.id)
             db.session.add(new_deck)
             db.session.commit()
             flash('Deck added!', category='success')
@@ -31,17 +31,7 @@ def home():
             Deck.query.filter_by(id=deckId).update(dict(name=deckName))
             db.session.commit()
             flash('Deck saved', category='success')
-            # print(storedDeck)
-            # if storedDeck:
-            #     query = '''
-            #             UPDATE deck
-            #             SET
-            #             name=?
-            #             WHERE id = ?
-            #         '''
-            #     db.session.execute(query,
-            #     [deckName,deckId])
-            #     db.session.commit()
+          
         except:
             db.session.rollback()
             flash('Something Went Wrong, Please Try Again', category='error')
@@ -49,17 +39,7 @@ def home():
     return render_template("home.html", user=current_user)
 
 
-@views.route('/delete-note', methods=['POST'])
-def delete_note():
-    note = json.loads(request.data)
-    noteId = note['noteId']
-    note = Note.query.get(noteId)
-    if note:
-        if note.user_id == current_user.id:
-            db.session.delete(note)
-            db.session.commit()
 
-    return jsonify({})
 
 @views.route('/delete-deck', methods=['POST'])
 def delete_deck():
@@ -151,23 +131,36 @@ def delete_card():
 
     return jsonify({})
 
-@views.route('/update-score', methods=['GET', 'POST'])
+@views.route('/update-score/<cardId>', methods=['GET', 'POST'])
 @login_required
-def update_score():
-    if request.method=='POST':
-        try:
-            data = json.loads(request.data)
-            deckId=data.deckId
-            cardId=data.cardId
-            score=data.score
-            Deck.query.filter_by(id=cdeckId).update(dict(score+=score))
+def update_score(cardId):
+    
+    if request.method =='POST':
+
+       
+            print(cardId)
+            _card=Card.query.filter_by(id=cardId).first()
+            deckId=_card.deck_id
             Card.query.filter_by(id=cardId).update(dict(visited=1))
+            level=request.form["score"]
+            deck = Deck.query.filter_by(id=deckId).first()
+            _score=deck.score+int(level)
+            Deck.query.filter_by(id=deckId).update(dict(score=_score))
             db.session.commit()
-            #flash('Successfully edited the card',category='success')
-            return  "good" 
-            #render_template("add.html", user=current_user)
-        except:
-            db.session.rollback()
-            flash('Something Went Wrong, Please Try Again', category='error')
+            flash('Score Updated', category='success')
+
+            __card = None
+            cards= Card.query.filter_by(deck_id=deckId).all()
+            for _card1 in cards:
+                print(_card1)
+                if _card1.visited==0:
+                    __card=_card1
+                    break
+
+            if __card == None:
+                __card="deck finished"
+            print(__card)
+            return render_template("card.html",card=__card,user=current_user)
+     
         
     
