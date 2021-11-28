@@ -112,7 +112,7 @@ def cards(deckId):
 
 @views.route('/card/edit/<cardId>', methods=['GET', 'POST'])
 @login_required
-def cards(cardId):
+def cards_edit(cardId):
     if request.method=='POST':
         try:
             print(cardId)
@@ -128,7 +128,7 @@ def cards(cardId):
         return render_template('edit.html',card=card)
 
 @views.route('/delete-card', methods=['POST'])
-def delete_deck():
+def delete_card():
     got_deck = json.loads(request.data)
     cardId = got_deck['cardId']
 
