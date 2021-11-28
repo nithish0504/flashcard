@@ -1,6 +1,34 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
     %}
+    <div class="well editPanel">
+      <h2>Edit</h2>
+      
+      <div class="container">
+        <form action="/card/edit/{{card.id}}" method="post" class="">
+          <div class="row">
+            <div class="form-group  mt-2 col-12">
+              <label for="front">Front of Card</label>
+              <input type="text" required name="front" id="front" class="form-control" value={{card.front}}>
+            </div>
+            <div class="form-group  mt-2 col-12">
+              <label for="back">Back of Card</label>
+              <textarea name="back" required class="form-control" id="back" placeholder="back of card" rows="6" value={{card.back}}></textarea>
+            </div>
+            <div class="form-group mt-2 col-12">
+              <button type="submit" class=" btn btn-lg btn-primary">Save</button>
+             </div>
+          </div>
+      
+        </form>
+      </div>
+          
+         
+          
+      </form>
+  </div>
 
-    
+  <div class="page-header">
+      <!-- <h2>{{ cards|length }} Card{{ '' if (cards|length == 1) else 's' }}</h2> -->
+  </div>
     {% endblock %}
     
