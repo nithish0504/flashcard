@@ -93,3 +93,48 @@ def home1():
             flash('Something Went Wrong, Please Try Again', category='error')
     return render_template("add.html", user=current_user)
 
+@views.route('/cards/<deckId>', methods=['GET', 'POST'])
+@login_required
+def cards(deckId):
+    if request.method=='GET':
+        try:
+            print(deckId)
+            cards= Card.query.filter_by(deck_id=deckId).all()
+            print(cards)
+            db.session.commit()
+            flash('Successfully added the card',category='success')
+        except:
+            db.session.rollback()
+            flash('Something Went Wrong, Please Try Again', category='error')
+    return render_template("add.html", user=current_user)
+
+@views.route('/card/<cardId>', methods=['GET', 'POST'])
+@login_required
+def cards(cardId):
+    if request.method=='POST':
+        try:
+            print(cardId)
+            Card.query.filter_by(id=cardId).update(dict(front=request.form['front'], back=request.form['back']))
+            db.session.commit()
+            flash('Successfully edited the card',category='success')
+        except:
+            db.session.rollback()
+            flash('Something Went Wrong, Please Try Again', category='error')
+    return render_template("add.html", user=current_user)
+
+@views.route('/delete-card', methods=['POST'])
+def delete_deck():
+    got_deck = json.loads(request.data)
+    cardId = got_deck['cardId']
+
+    try:
+        card = Deck.query.get(cardId)
+        if card:
+                db.session.delete(card)
+                db.session.commit()
+                flash('card deleted successfully!', category='success')
+    except:
+        db.session.rollback()
+        flash('Something Went Wrong, Please Try Again', category='error')
+
+    return jsonify({})

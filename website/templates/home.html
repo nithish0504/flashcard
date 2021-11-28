@@ -5,7 +5,7 @@
   {% for deck in user.decks %}
   <li class="todo-item-container d-flex flex-row">    
     <div class="label-container d-flex flex-row justify-content-around">
-      <label class="checkbox-label"><a href="/add">{{deck.name}}</a></label>
+      <label class="checkbox-label"><a href="/cards/{{deck.id}}">{{deck.name}}</a></label>
         <div class="delete-icon-container"><i class="delete-icon">{{deck.score}}</i></div> 
       
         <div class="delete-icon-container" onClick="editDeck({{ deck.id }})"><i class="fas fa-pen delete-icon"></i></div> 
