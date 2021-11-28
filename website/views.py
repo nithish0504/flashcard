@@ -150,3 +150,18 @@ def delete_card():
         flash('Something Went Wrong, Please Try Again', category='error')
 
     return jsonify({})
+
+@views.route('/update-score', methods=['GET', 'POST'])
+@login_required
+def cards_edit(cardId):
+    if request.method=='POST':
+        try:
+            print(cardId)
+            Card.query.filter_by(id=cardId).update(dict(front=request.form['front'], back=request.form['back']))
+            db.session.commit()
+            flash('Successfully edited the card',category='success')
+        except:
+            db.session.rollback()
+            flash('Something Went Wrong, Please Try Again', category='error')
+        return render_template("add.html", user=current_user)
+    
