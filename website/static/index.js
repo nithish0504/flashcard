@@ -53,3 +53,12 @@ function deleteCard(cardId) {
     window.location.href = "/deck/";
   });
 }
+
+function showAnswer(e){
+  let _div=document.getElementById("ansdiv")
+  _div.classList.remove("d-none")
+  let _btndiv = document.getElementById("btndiv")
+  _btndiv.classList.remove("d-none")
+  let _sans = document.getElementById("sansdiv")
+  _sans.classList.add("d-none")
+}

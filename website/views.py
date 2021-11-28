@@ -84,7 +84,7 @@ def delete_deck():
 def home1():
     if request.method=='POST':
         try:
-            new_card = Card(front=request.form['front'], back=request.form['back'], known=0,type=0,deck_id=request.form['deck_name'])
+            new_card = Card(front=request.form['front'], back=request.form['back'], known=0, visited=0, type=0,deck_id=request.form['deck_name'])
             db.session.add(new_card)
             db.session.commit()
             flash('Successfully added the card',category='success')
@@ -97,18 +97,25 @@ def home1():
 @login_required
 def cards(deckId):
     if request.method=='GET':
-        try:
+        # try:
+            __card=None
             print(deckId)
-            card= Card.query.filter_by(deck_id=deckId,visited=0).first()
-            print(card)
-            if len(card)==0 or not card:
-                card="deck finished"
-            db.session.commit()
-            return render_template('card.html',card=card)
-        except:
-            db.session.rollback()
-            flash('Something Went Wrong, Please Try Again', category='error')
-    return render_template("add.html", user=current_user)
+            cards= Card.query.filter_by(deck_id=deckId).all()
+            for _card in cards:
+                print(_card)
+                if _card.visited==0:
+                    __card=_card
+                    break
+
+            if __card == None:
+                __card="deck finished"
+            #db.session.commit()
+            print(__card)
+            return render_template("card.html",card=__card,user=current_user)
+        # except :
+        #     #db.session.rollback()
+        #     flash('Something Went Wrong, Please Try Again', category='error')
+   # return render_template("add.html", user=current_user)
 
 @views.route('/card/edit/<cardId>', methods=['GET', 'POST'])
 @login_required
@@ -125,7 +132,7 @@ def cards_edit(cardId):
         return render_template("add.html", user=current_user)
     elif request.method=='GET':
         card=Card.query.filter_by(id=cardId).first()
-        return render_template('edit.html',card=card)
+        return render_template('edit.html',card=card,user=current_user)
 
 @views.route('/delete-card', methods=['POST'])
 def delete_card():
