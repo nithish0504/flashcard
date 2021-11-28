@@ -153,15 +153,21 @@ def delete_card():
 
 @views.route('/update-score', methods=['GET', 'POST'])
 @login_required
-def cards_edit(cardId):
+def update_score():
     if request.method=='POST':
         try:
-            print(cardId)
-            Card.query.filter_by(id=cardId).update(dict(front=request.form['front'], back=request.form['back']))
+            data = json.loads(request.data)
+            deckId=data.deckId
+            cardId=data.cardId
+            score=data.score
+            Deck.query.filter_by(id=cdeckId).update(dict(score+=score))
+            Card.query.filter_by(id=cardId).update(dict(visited=1))
             db.session.commit()
-            flash('Successfully edited the card',category='success')
+            #flash('Successfully edited the card',category='success')
+            return  "good" 
+            #render_template("add.html", user=current_user)
         except:
             db.session.rollback()
             flash('Something Went Wrong, Please Try Again', category='error')
-        return render_template("add.html", user=current_user)
+        
     
