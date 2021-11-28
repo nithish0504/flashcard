@@ -13,7 +13,7 @@ views = Blueprint('views', __name__)
 def home():
     if request.method == 'POST':
         deck = json.loads(request.data)
-        print(deck)
+      
         deckName = deck["deckName"]
 
         if len(deckName) < 1:
@@ -79,10 +79,10 @@ def cards(deckId):
     if request.method=='GET':
         # try:
             __card=None
-            print(deckId)
+        
             cards= Card.query.filter_by(deck_id=deckId).all()
             for _card in cards:
-                print(_card)
+               
                 if _card.visited==0:
                     __card=_card
                     break
@@ -90,7 +90,7 @@ def cards(deckId):
             if __card == None:
                 __card="deck finished"
             #db.session.commit()
-            print(__card)
+         
             return render_template("card.html",card=__card,user=current_user)
         # except :
         #     #db.session.rollback()
@@ -102,7 +102,7 @@ def cards(deckId):
 def cards_edit(cardId):
     if request.method=='POST':
         try:
-            print(cardId)
+           
             Card.query.filter_by(id=cardId).update(dict(front=request.form['front'], back=request.form['back']))
             db.session.commit()
             flash('Successfully edited the card',category='success')
@@ -138,7 +138,6 @@ def update_score(cardId):
     if request.method =='POST':
 
        
-            print(cardId)
             _card=Card.query.filter_by(id=cardId).first()
             deckId=_card.deck_id
             Card.query.filter_by(id=cardId).update(dict(visited=1))
@@ -152,14 +151,14 @@ def update_score(cardId):
             __card = None
             cards= Card.query.filter_by(deck_id=deckId).all()
             for _card1 in cards:
-                print(_card1)
+                
                 if _card1.visited==0:
                     __card=_card1
                     break
 
             if __card == None:
                 __card="deck finished"
-            print(__card)
+        
             return render_template("card.html",card=__card,user=current_user)
      
         
