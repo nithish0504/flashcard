@@ -99,16 +99,18 @@ def cards(deckId):
     if request.method=='GET':
         try:
             print(deckId)
-            cards= Card.query.filter_by(deck_id=deckId).all()
-            print(cards)
+            card= Card.query.filter_by(deck_id=deckId,visited=0).first()
+            print(card)
+            if len(card)==0 or not card:
+                card="deck finished"
             db.session.commit()
-            flash('Successfully added the card',category='success')
+            return render_template('card.html',card=card)
         except:
             db.session.rollback()
             flash('Something Went Wrong, Please Try Again', category='error')
     return render_template("add.html", user=current_user)
 
-@views.route('/card/<cardId>', methods=['GET', 'POST'])
+@views.route('/card/edit/<cardId>', methods=['GET', 'POST'])
 @login_required
 def cards(cardId):
     if request.method=='POST':
@@ -120,7 +122,10 @@ def cards(cardId):
         except:
             db.session.rollback()
             flash('Something Went Wrong, Please Try Again', category='error')
-    return render_template("add.html", user=current_user)
+        return render_template("add.html", user=current_user)
+    elif request.method=='GET':
+        card=Card.query.filter_by(id=cardId).first()
+        return render_template('edit.html',card=card)
 
 @views.route('/delete-card', methods=['POST'])
 def delete_deck():

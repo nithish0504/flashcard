@@ -22,6 +22,7 @@ class Card(db.Model):
     front = db.Column(db.String(40))
     back = db.Column(db.String(40))
     known = db.Column(db.Integer)
+    visited=db.Column(db.Integer)
     type = db.Column(db.Integer)
     deck_id=db.Column(db.Integer,db.ForeignKey('deck.id'))
 
