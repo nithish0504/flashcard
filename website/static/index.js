@@ -62,3 +62,14 @@ function showAnswer(e){
   let _sans = document.getElementById("sansdiv")
   _sans.classList.add("d-none")
 }
+
+function score(level,obj){
+  fetch("/update-score", {
+    method: "POST",
+    body: JSON.stringify({ cardId: obj.id, deckId:obj.decck_id, score:level }),
+  }).then((_res) => {
+    window.location.href = "/deck/";
+  });
+  
+}
+  
