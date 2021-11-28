@@ -68,7 +68,8 @@ function score(level,obj){
     method: "POST",
     body: JSON.stringify({ cardId: obj.id, deckId:obj.decck_id, score:level }),
   }).then((_res) => {
-    window.location.href = "/deck/";
+    let url=`/cards/${obj.deckId}`
+    window.location.href = url;
   });
   
 }
